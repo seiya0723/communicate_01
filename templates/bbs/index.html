@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Hello World test!!</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+</head>
+<body>
+
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <textarea class="form-control" name="comment"></textarea>
+        <input type="file" name="attachment">
+        <input type="submit" value="送信">
+    </form>
+
+    {% for topic in topics %}
+    <div class="border p-2 m-2">
+        <p>{{ topic.comment }}</p>
+
+
+        {% if topic.mime == "image/png" or topic.mime == "image/jpeg" %}
+        <div><img src="/media/{{ topic.attachment }}" alt=""></div>
+        {% elif topic.mime == "video/mp4" %}
+        <div><video src="/media/{{ topic.attachment }}" controls></video></div>
+        {% else %}
+        {{ topic.attachment }}
+        {% endif %}
+
+        <a href="{% url 'bbs:single' topic.id %}">コメント</a>
+
+    </div>
+    {% endfor %}
+
+	<p>Hello World !!</p>
+</body>
+</html>
+

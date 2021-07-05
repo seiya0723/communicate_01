@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>コメントページ</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+</head>
+<body>
+
+    <div class="border p-2 m-2">
+        <p>{{ topic.comment }}</p>
+
+        {% if topic.mime == "image/png" or topic.mime == "image/jpeg" %}
+        <div><img src="/media/{{ topic.attachment }}" alt=""></div>
+        {% elif topic.mime == "video/mp4" %}
+        <div><video src="/media/{{ topic.attachment }}"></video></div>
+        {% else %}
+        {{ topic.attachment }}
+        {% endif %}
+    </div>
+
+    <form action="{% url 'bbs:single' topic.id  %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <textarea class="form-control" name="comment"></textarea>
+        <input type="file" name="attachment">
+        <input type="submit" value="送信">
+    </form>
+
+    <h2>投稿されたコメント</h2>
+
+    {% for reply in replies %}
+    <div class="border p-2 m-2">
+        <p>{{ reply.comment }}</p>
+
+        {% if reply.mime == "image/png" or reply.mime == "image/jpeg" %}
+        <img src="/media/{{ reply.attachment }}" alt="">
+        {% elif reply.mime == "video/mp4" %}
+        <video src="/media/{{ reply.attachment }}" controls></video>
+        {% else %}
+        {{ reply.attachment }}
+        {% endif %}
+
+    </div>
+    {% endfor %}
+    
+
+
+
+
+</body>
+</html>
+
